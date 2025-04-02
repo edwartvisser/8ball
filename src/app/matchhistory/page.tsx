@@ -31,7 +31,7 @@ export default function MatchHistory() {
           opponentName: 'Jessica K.', 
           opponentInitial: 'J', 
           opponentColor: 'yellow', 
-          result: 'win', 
+          result: 'win' as const, 
           score: '1-0',
           time: '3:45 PM'
         },
@@ -40,7 +40,7 @@ export default function MatchHistory() {
           opponentName: 'Michael T.', 
           opponentInitial: 'M', 
           opponentColor: 'purple', 
-          result: 'win', 
+          result: 'win' as const, 
           score: '1-0',
           time: '2:20 PM'
         }
@@ -55,7 +55,7 @@ export default function MatchHistory() {
           opponentName: 'Sandra L.', 
           opponentInitial: 'S', 
           opponentColor: 'green', 
-          result: 'loss', 
+          result: 'loss' as const, 
           score: '0-1',
           time: '7:30 PM'
         }
@@ -69,7 +69,7 @@ export default function MatchHistory() {
           opponentName: 'David M.', 
           opponentInitial: 'D', 
           opponentColor: 'red', 
-          result: 'win', 
+          result: 'win' as const, 
           score: '1-0'
         }
       ]
@@ -82,7 +82,7 @@ export default function MatchHistory() {
           opponentName: 'Michael T.', 
           opponentInitial: 'M', 
           opponentColor: 'purple', 
-          result: 'win', 
+          result: 'win' as const, 
           score: '1-0'
         },
         { 
@@ -90,7 +90,7 @@ export default function MatchHistory() {
           opponentName: 'Jessica K.', 
           opponentInitial: 'J', 
           opponentColor: 'yellow', 
-          result: 'loss', 
+          result: 'loss' as const, 
           score: '0-1'
         }
       ]
