@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 Ball Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(to bottom, #f0f4ff, #ffffff);
+            height: 812px;
+            width: 375px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+        }
+        .avatar {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-weight: 600;
+        }
+        .player-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .player-j {
+            background: #f59e0b;
+            color: white;
+        }
+        .player-m {
+            background: #8b5cf6;
+            color: white;
+        }
+        .player-s {
+            background: #10b981;
+            color: white;
+        }
+        .player-d {
+            background: #ef4444;
+            color: white;
+        }
+        .result-win {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #047857;
+        }
+        .result-loss {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #b91c1c;
+        }
+        .tab-active {
+            color: #6366f1;
+            border-bottom: 2px solid #6366f1;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="px-5 py-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-xl font-bold text-black">8 Ball Tracker</h1>
+                <p class="text-sm text-gray-500">Hello, Alex</p>
+            </div>
+            <div class="avatar">A</div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <!-- Win Rate Card -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Win Rate</p>
+                <p class="text-2xl font-bold mb-2">67%</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 67%"></div>
+                </div>
+            </div>
+            
+            <!-- Current Streak Card -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Current Streak</p>
+                <p class="text-2xl font-bold mb-2">+3</p>
+                <p class="text-xs text-emerald-500">Keep it up!</p>
+            </div>
+            
+            <!-- Wins Card -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Wins</p>
+                <p class="text-2xl font-bold">24</p>
+            </div>
+            
+            <!-- Losses Card -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Losses</p>
+                <p class="text-2xl font-bold">12</p>
+            </div>
+        </div>
+
+        <!-- Record New Match Button -->
+        <button id="record-match-btn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg mb-4">
+            Record New Match
+        </button>
+        
+        <script>
+            // Navigate to new match page
+            document.getElementById('record-match-btn').addEventListener('click', function() {
+                window.location.href = 'new-match.html';
+            });
+        </script>
+
+        <!-- Tabs -->
+        <div class="flex border-b mb-5">
+            <button class="flex-1 py-2 text-sm font-medium tab-active">Rankings</button>
+            <button class="flex-1 py-2 text-sm font-medium text-gray-500">History</button>
+        </div>
+
+        <!-- Recent Matches -->
+        <div class="mb-4">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-sm font-medium">Recent Matches</h2>
+                <a href="#" class="text-xs text-gray-500">See All</a>
+            </div>
+
+            <!-- Match List -->
+            <div class="space-y-3">
+                <!-- Match 1 -->
+                <div class="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="player-avatar player-j mr-3">J</div>
+                        <div>
+                            <p class="font-medium text-sm">Jessica K.</p>
+                            <p class="text-xs text-gray-500">Today</p>
+                        </div>
+                    </div>
+                    <div class="result-win text-xs font-medium px-2 py-1 rounded">Win</div>
+                </div>
+
+                <!-- Match 2 -->
+                <div class="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="player-avatar player-m mr-3">M</div>
+                        <div>
+                            <p class="font-medium text-sm">Michael T.</p>
+                            <p class="text-xs text-gray-500">Today</p>
+                        </div>
+                    </div>
+                    <div class="result-win text-xs font-medium px-2 py-1 rounded">Win</div>
+                </div>
+
+                <!-- Match 3 -->
+                <div class="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="player-avatar player-s mr-3">S</div>
+                        <div>
+                            <p class="font-medium text-sm">Sandra L.</p>
+                            <p class="text-xs text-gray-500">Yesterday</p>
+                        </div>
+                    </div>
+                    <div class="result-loss text-xs font-medium px-2 py-1 rounded">Loss</div>
+                </div>
+
+                <!-- Match 4 -->
+                <div class="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="player-avatar player-d mr-3">D</div>
+                        <div>
+                            <p class="font-medium text-sm">David M.</p>
+                            <p class="text-xs text-gray-500">2 days ago</p>
+                        </div>
+                    </div>
+                    <div class="result-win text-xs font-medium px-2 py-1 rounded">Win</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="fixed bottom-0 w-full bg-white border-t flex justify-around py-3">
+        <div class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span class="text-xs mt-1 text-indigo-600 font-medium">Dashboard</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span class="text-xs mt-1 text-gray-400">New Match</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <span class="text-xs mt-1 text-gray-400">Player Rankings</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span class="text-xs mt-1 text-gray-400">Player Profile</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-xs mt-1 text-gray-400">Match History</span>
+        </div>
+    </div>
+</body>
+</html>

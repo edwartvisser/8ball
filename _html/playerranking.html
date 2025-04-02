@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 Ball Tracker - Player Rankings</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(to bottom, #f0f4ff, #ffffff);
+            height: 812px;
+            width: 375px;
+            overflow: hidden;
+        }
+        .player-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .rank-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .rank-1 {
+            background: #FFD700;
+            color: #000;
+        }
+        .rank-2 {
+            background: #C0C0C0;
+            color: #000;
+        }
+        .rank-3 {
+            background: #CD7F32;
+            color: #fff;
+        }
+        .rank-default {
+            background: #E5E7EB;
+            color: #4B5563;
+        }
+        .back-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+        .filter-active {
+            color: #6366f1;
+            border-bottom: 2px solid #6366f1;
+        }
+        .tab-active {
+            background-color: #6366f1;
+            color: white;
+        }
+        .tab-inactive {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+        .streak-positive {
+            color: #10b981;
+        }
+        .streak-negative {
+            color: #ef4444;
+        }
+        .streak-neutral {
+            color: #9ca3af;
+        }
+        .you-badge {
+            background-color: #6366f1;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="h-full flex flex-col">
+        <!-- Header -->
+        <div class="flex items-center px-5 py-6">
+            <div class="back-button mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </div>
+            <h1 class="text-xl font-bold text-black">Player Rankings</h1>
+        </div>
+
+        <!-- Filters -->
+        <div class="px-5 mb-4">
+            <div class="flex bg-gray-100 p-1 rounded-lg">
+                <button class="flex-1 px-4 py-2 text-sm font-medium rounded-md tab-active">All Players</button>
+                <button class="flex-1 px-4 py-2 text-sm font-medium rounded-md tab-inactive">Played</button>
+                <button class="flex-1 px-4 py-2 text-sm font-medium rounded-md tab-inactive">Not Played</button>
+            </div>
+        </div>
+
+        <!-- Rankings Table Header -->
+        <div class="px-5 mb-2">
+            <div class="grid grid-cols-12 text-sm text-gray-500 font-medium pb-2 border-b">
+                <div class="col-span-1">Rank</div>
+                <div class="col-span-5">Player</div>
+                <div class="col-span-2 text-center">W/L</div>
+                <div class="col-span-2 text-center">Streak</div>
+                <div class="col-span-2 text-right">Win %</div>
+            </div>
+        </div>
+
+        <!-- Rankings List -->
+        <div class="px-5 overflow-y-auto flex-1">
+            <div class="space-y-4">
+                <!-- Player 1 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-1">1</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-yellow-500 text-white">J</div>
+                        <div class="font-medium">Jessica K.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">23-9</div>
+                    <div class="col-span-2 text-center text-sm streak-positive">+2</div>
+                    <div class="col-span-2 text-right text-sm font-medium">71.9%</div>
+                </div>
+
+                <!-- Player 2 (You) -->
+                <div class="grid grid-cols-12 items-center py-2 border-b bg-indigo-50">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-2">2</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-indigo-500 text-white">Y</div>
+                        <div class="font-medium">You</div>
+                        <div class="ml-2 px-1.5 py-0.5 rounded-md text-xs you-badge">You</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">24-12</div>
+                    <div class="col-span-2 text-center text-sm streak-positive">+3</div>
+                    <div class="col-span-2 text-right text-sm font-medium">66.7%</div>
+                </div>
+
+                <!-- Player 3 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-3">3</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-purple-500 text-white">M</div>
+                        <div class="font-medium">Michael T.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">17-11</div>
+                    <div class="col-span-2 text-center text-sm streak-negative">-1</div>
+                    <div class="col-span-2 text-right text-sm font-medium">60.7%</div>
+                </div>
+
+                <!-- Player 4 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-default">4</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-green-500 text-white">S</div>
+                        <div class="font-medium">Sandra L.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">24-17</div>
+                    <div class="col-span-2 text-center text-sm streak-positive">+1</div>
+                    <div class="col-span-2 text-right text-sm font-medium">58.5%</div>
+                </div>
+
+                <!-- Player 5 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-default">5</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-blue-500 text-white">T</div>
+                        <div class="font-medium">Thomas W.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">14-11</div>
+                    <div class="col-span-2 text-center text-sm streak-positive">+4</div>
+                    <div class="col-span-2 text-right text-sm font-medium">56.0%</div>
+                </div>
+
+                <!-- Player 6 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-default">6</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-red-500 text-white">D</div>
+                        <div class="font-medium">David M.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">16-14</div>
+                    <div class="col-span-2 text-center text-sm streak-negative">-2</div>
+                    <div class="col-span-2 text-right text-sm font-medium">53.3%</div>
+                </div>
+
+                <!-- Player 7 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-default">7</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-pink-500 text-white">E</div>
+                        <div class="font-medium">Emily R.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">11-11</div>
+                    <div class="col-span-2 text-center text-sm streak-neutral">-</div>
+                    <div class="col-span-2 text-right text-sm font-medium">50.0%</div>
+                </div>
+
+                <!-- Player 8 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-default">8</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-orange-500 text-white">R</div>
+                        <div class="font-medium">Robert J.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">8-10</div>
+                    <div class="col-span-2 text-center text-sm streak-negative">-3</div>
+                    <div class="col-span-2 text-right text-sm font-medium">44.4%</div>
+                </div>
+
+                <!-- Player 9 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-default">9</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-blue-300 text-white">L</div>
+                        <div class="font-medium">Lisa P.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">0-0</div>
+                    <div class="col-span-2 text-center text-sm streak-neutral">-</div>
+                    <div class="col-span-2 text-right text-sm font-medium">0.0%</div>
+                </div>
+
+                <!-- Player 10 -->
+                <div class="grid grid-cols-12 items-center py-2 border-b">
+                    <div class="col-span-1">
+                        <div class="rank-badge rank-default">10</div>
+                    </div>
+                    <div class="col-span-5 flex items-center">
+                        <div class="player-avatar mr-2 bg-teal-500 text-white">C</div>
+                        <div class="font-medium">Chris B.</div>
+                    </div>
+                    <div class="col-span-2 text-center text-sm">0-0</div>
+                    <div class="col-span-2 text-center text-sm streak-neutral">-</div>
+                    <div class="col-span-2 text-right text-sm font-medium">0.0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Position Indicator -->
+        <div class="px-5 py-2 border-t bg-white mt-auto">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="h-6 w-6 rounded-full bg-yellow-500 flex items-center justify-center text-xs font-bold text-white mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">Top 3 Rank</span>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-500">Your Position</span>
+                    <span class="ml-2 font-medium">#2</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="w-full bg-white border-t flex justify-around py-3">
+            <div class="flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span class="text-xs mt-1 text-gray-400">Dashboard</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span class="text-xs mt-1 text-gray-400">New Match</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span class="text-xs mt-1 text-indigo-600 font-medium">Player Rankings</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span class="text-xs mt-1 text-gray-400">Player Profile</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-xs mt-1 text-gray-400">Match History</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
