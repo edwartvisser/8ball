@@ -2,7 +2,7 @@
 
 interface AvatarProps {
   initial: string;
-  color?: string;
+  color?: "indigo" | "yellow" | "purple" | "green" | "red";
   size?: "sm" | "md" | "lg";
   className?: string; // Add this line to accept className
 }
