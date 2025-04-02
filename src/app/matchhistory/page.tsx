@@ -7,7 +7,6 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { Card, StatCard } from '../../components/ui/Card';
 import { TabNav } from '../../components/ui/Tabs';
 import { Avatar } from '../../components/ui/Avatar';
-import { StatusBadge } from '../../components/ui/Badge';
 import { BottomNavigation } from '../../components/layout/BottomNavigation';
 
 export default function MatchHistory() {

@@ -7,7 +7,6 @@ import { AppLayout } from '../../components/layout/AppLayout';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TabNav } from '../../components/ui/Tabs';
 import { RankingPlayerItem } from '../../components/features/PlayerListItem';
-import { Badge } from '../../components/ui/Badge';
 import BottomNavigation from '@/components/layout/BottomNavigation';
 
 export default function PlayerRanking() {

@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '../../components/layout/AppLayout';
-import { Tabs, TabNav } from '../../components/ui/Tabs';
+import { TabNav } from '../../components/ui/Tabs';
 import { StatCard } from '../../components/ui/Card';
-import { PageHeader } from '@/components/ui/PageHeader';
 import {PlayerListItem} from '@/components/features/PlayerListItem';
 import BottomNavigation from '@/components/layout/BottomNavigation';
 

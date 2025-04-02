@@ -46,7 +46,7 @@ export const PlayerListItem = ({
       <div className="flex items-center">
         <Avatar initial={initial} color={avatarColor} size="sm" />
         
-        <div className="ml-3">
+        <div className="">
           <div className="flex items-center">
             <p className="font-medium text-sm">{name}</p>
             {isCurrentUser && (

@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '../../components/layout/AppLayout';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { Card } from '../../components/ui/Card';
 import { OpponentSelectItem } from '../../components/features/PlayerListItem';
 import BottomNavigation from '@/components/layout/BottomNavigation';
 
