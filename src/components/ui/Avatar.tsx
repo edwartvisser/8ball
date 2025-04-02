@@ -1,8 +1,9 @@
 // src/components/ui/Avatar.tsx
+type AvatarColor = 'indigo' | 'yellow' | 'purple' | 'green' | 'red' | 'blue' | 'pink' | 'orange' | 'teal';
 
 interface AvatarProps {
   initial: string;
-  color?: "indigo" | "yellow" | "purple" | "green" | "red";
+  color?: AvatarColor;
   size?: "sm" | "md" | "lg";
   className?: string; // Add this line to accept className
 }
