@@ -44,9 +44,13 @@ export const PlayerListItem = ({
       onClick={onClick}
     >
       <div className="flex items-center">
-        <Avatar initial={initial} color={avatarColor} size="sm" />
-        
-        <div className="">
+        {rank !== undefined && (
+          <div className="mr-3">
+            <RankBadge rank={rank} />
+          </div>
+        )}
+        <Avatar initial={initial} color={avatarColor} size="sm" className="mr-3" />
+        <div>
           <div className="flex items-center">
             <p className="font-medium text-sm">{name}</p>
             {isCurrentUser && (
@@ -102,18 +106,14 @@ export const RankingPlayerItem = ({
   };
 
   return (
-    <div className="grid grid-cols-12 items-center py-2 border-b">
+    <div className="grid grid-cols-12 items-center p-4 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors cursor-pointer">
       <div className="col-span-1">
         <RankBadge rank={player.rank} />
       </div>
-      <div className="col-span-5 flex items-center">
-        <Avatar 
-          initial={player.initial} 
-          color={player.avatarColor} 
-          size="sm" 
-          className="mr-2" 
-        />
-        <div className="font-medium">{player.name}</div>
+      
+      <div className="ml-2 col-span-5 flex items-center">
+        
+        <div className="font-medium text-sm">{player.name}</div>
         {player.isCurrentUser && (
           <span className="ml-2 text-xs bg-indigo-600 text-white px-1.5 py-0.5 rounded-md">
             You

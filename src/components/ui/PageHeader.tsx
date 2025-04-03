@@ -24,7 +24,7 @@ export const PageHeader = ({
           <Link
             href={backUrl}
             aria-label={backAriaLabel}
-            className="flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+            className="flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-indigo-200 text-indigo-700 hover:bg-indigo-600 hover:text-white transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +71,7 @@ export const PageHeaderWithSubtitle = ({
             <Link
               href={props.backUrl}
               aria-label={props.backAriaLabel}
-              className="flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+              className="flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-indigo-200 text-indigo-700 hover:bg-indigo-600 hover:text-white transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

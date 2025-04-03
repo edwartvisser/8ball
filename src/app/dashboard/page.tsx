@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '../../components/layout/AppLayout';
-import { TabNav } from '../../components/ui/Tabs';
+// import { TabNav } from '../../components/ui/Tabs';
 import { StatCard } from '../../components/ui/Card';
 import {PlayerListItem} from '@/components/features/PlayerListItem';
 import BottomNavigation from '@/components/layout/BottomNavigation';
@@ -26,7 +26,11 @@ export default function Dashboard() {
     { id: 1, opponent: 'Jessica K.', initial: 'J', color: 'yellow', result: 'win', when: 'Today' },
     { id: 2, opponent: 'Michael T.', initial: 'M', color: 'purple', result: 'win', when: 'Today' },
     { id: 3, opponent: 'Sandra L.', initial: 'S', color: 'green', result: 'loss', when: 'Yesterday' },
-    { id: 4, opponent: 'David M.', initial: 'D', color: 'red', result: 'win', when: '2 days ago' }
+    { id: 4, opponent: 'David M.', initial: 'D', color: 'red', result: 'win', when: '2 days ago' },
+    { id: 5, opponent: 'Emily R.', initial: 'E', color: 'blue', result: 'loss', when: '3 days ago' },
+    { id: 6, opponent: 'Chris P.', initial: 'C', color: 'orange', result: 'win', when: '4 days ago' },
+    { id: 7, opponent: 'Laura H.', initial: 'L', color: 'pink', result: 'loss', when: '5 days ago' },
+    { id: 8, opponent: 'Tom W.', initial: 'T', color: 'teal', result: 'win', when: '6 days ago' }
   ];
 
   return (
@@ -81,123 +85,32 @@ export default function Dashboard() {
         </Link>
 
         {/* Tabs */}
-        <TabNav
-          options={[
-            { id: 'recent', label: 'Recent Matches' },
-            { id: 'history', label: 'History' }
-          ]}
-          activeId={activeTab}
-          onChange={setActiveTab}
-          variant="underline"
-          className="mb-5"
-        />
-
-        {/* Tab Content */}
-        <div>
-          {activeTab === 'recent' && (
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="text-sm font-medium">Recent Matches</h2>
-                <Link href="/matchhistory" className="text-xs text-gray-500">
-                  See All
-                </Link>
-              </div>
-
-              {/* Match List */}
-              <div className="space-y-3">
-                {recentMatches.map((match) => (
-                  
-                  <PlayerListItem
-                    key={match.id}
-                    initial={match.initial}
-                    name={match.opponent}
-                    avatarColor={match.color}
-                    stats={
-                      <div className="flex items-center">
-                        <span className={`text-xs font-medium px-2 py-1 rounded ${match.result === 'win' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                          {match.result === 'win' ? 'Win' : 'Loss'}
-                        </span>
-                      </div>
-                    }
-                    subtitle={match.when}
-                    onClick={() => console.log(`Clicked on ${match.opponent}`)}
-                    className="cursor-pointer hover:bg-gray-50 transition-colors"
-                  />
-
-                  
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'history' && (
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="text-sm font-medium">Match History</h2>
-                <Link href="/matchhistory" className="text-xs text-gray-500">
-                  View All
-                </Link>
-              </div>
-
-              {/* Alternative view of matches by time */}
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-xs font-medium text-gray-500 mb-2">Today</h3>
-                  <div className="space-y-2">
-                    {recentMatches.filter(m => m.when === 'Today').map((match) => (
-                      <div key={match.id} className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
-                        <div className="flex items-center">
-                          <div 
-                            className={`w-7 h-7 rounded-full bg-${match.color}-500 text-white flex items-center justify-center text-xs font-semibold mr-3`}
-                          >
-                            {match.initial}
-                          </div>
-                          <p className="font-medium text-sm">{match.opponent}</p>
-                        </div>
-                        <div 
-                          className={`text-xs font-medium px-2 py-1 rounded ${
-                            match.result === 'win' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-red-100 text-red-800'
-                          }`}
-                        >
-                          {match.result === 'win' ? 'Win' : 'Loss'}
-                        </div>
-                      </div>
-                    ))}
+        {/* Match List */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold">Recent Matches</h2>
+            {recentMatches.slice(0, 6).map((match) => (
+              
+              <PlayerListItem
+                key={match.id}
+                initial={match.initial}
+                name={match.opponent}
+                avatarColor={match.color}
+                stats={
+                  <div className="flex items-center">
+                    <span className={`text-xs font-medium px-2 py-1 rounded ${match.result === 'win' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {match.result === 'win' ? 'Win' : 'Loss'}
+                    </span>
                   </div>
-                </div>
+                }
+                subtitle={match.when}
+                onClick={() => console.log(`Clicked on ${match.opponent}`)}
+                className="cursor-pointer hover:bg-gray-50 transition-colors"
+              />
 
-                <div>
-                  <h3 className="text-xs font-medium text-gray-500 mb-2">Yesterday</h3>
-                  <div className="space-y-2">
-                    {recentMatches.filter(m => m.when === 'Yesterday').map((match) => (
-                      <div key={match.id} className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
-                        <div className="flex items-center">
-                          <div 
-                            className={`w-7 h-7 rounded-full bg-${match.color}-500 text-white flex items-center justify-center text-xs font-semibold mr-3`}
-                          >
-                            {match.initial}
-                          </div>
-                          <p className="font-medium text-sm">{match.opponent}</p>
-                        </div>
-                        <div 
-                          className={`text-xs font-medium px-2 py-1 rounded ${
-                            match.result === 'win' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-red-100 text-red-800'
-                          }`}
-                        >
-                          {match.result === 'win' ? 'Win' : 'Loss'}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+              
+            ))}
+          </div>
+        
       </div>
 
       <BottomNavigation />

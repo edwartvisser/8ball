@@ -15,28 +15,32 @@ export default function NewMatch() {
   const [matchResult, setMatchResult] = useState<'win' | 'loss' | null>(null);
 
   // Mock data for recent opponents
+  const colors = ['yellow', 'purple', 'green', 'blue', 'pink', 'orange', 'red', 'teal', 'cyan'];
+
   const recentOpponents = [
-    { 
-      id: '1', 
-      name: 'Jessica K.', 
-      initial: 'J', 
-      avatarColor: 'yellow',
-      winRate: 38
-    },
-    { 
-      id: '2', 
-      name: 'Michael T.', 
-      initial: 'M', 
-      avatarColor: 'purple',
-      winRate: 52
-    },
-    { 
-      id: '3', 
-      name: 'Sandra L.', 
-      initial: 'S', 
-      avatarColor: 'green',
-      winRate: 45
-    }
+    { id: '1', name: 'Jessica K.', initial: 'J', avatarColor: colors[0 % colors.length], winRate: 38 },
+    { id: '2', name: 'Michael T.', initial: 'M', avatarColor: colors[1 % colors.length], winRate: 52 },
+    { id: '3', name: 'Sandra L.', initial: 'S', avatarColor: colors[2 % colors.length], winRate: 45 },
+    { id: '4', name: 'David P.', initial: 'D', avatarColor: colors[3 % colors.length], winRate: 60 },
+    { id: '5', name: 'Emily R.', initial: 'E', avatarColor: colors[4 % colors.length], winRate: 47 },
+    { id: '6', name: 'Chris B.', initial: 'C', avatarColor: colors[5 % colors.length], winRate: 50 },
+    { id: '7', name: 'Laura H.', initial: 'L', avatarColor: colors[6 % colors.length], winRate: 42 },
+    { id: '8', name: 'James W.', initial: 'J', avatarColor: colors[7 % colors.length], winRate: 55 },
+    { id: '9', name: 'Sophia N.', initial: 'S', avatarColor: colors[8 % colors.length], winRate: 49 },
+    { id: '10', name: 'Daniel G.', initial: 'D', avatarColor: colors[9 % colors.length], winRate: 53 },
+    { id: '11', name: 'Olivia F.', initial: 'O', avatarColor: colors[10 % colors.length], winRate: 46 },
+    { id: '12', name: 'Ethan C.', initial: 'E', avatarColor: colors[11 % colors.length], winRate: 51 },
+    { id: '13', name: 'Ava M.', initial: 'A', avatarColor: colors[12 % colors.length], winRate: 44 },
+    { id: '14', name: 'Liam J.', initial: 'L', avatarColor: colors[13 % colors.length], winRate: 57 },
+    { id: '15', name: 'Isabella K.', initial: 'I', avatarColor: colors[14 % colors.length], winRate: 48 },
+    { id: '16', name: 'Noah V.', initial: 'N', avatarColor: colors[15 % colors.length], winRate: 54 },
+    { id: '17', name: 'Mia Z.', initial: 'M', avatarColor: colors[16 % colors.length], winRate: 43 },
+    { id: '18', name: 'Alexander T.', initial: 'A', avatarColor: colors[17 % colors.length], winRate: 56 },
+    { id: '19', name: 'Charlotte Q.', initial: 'C', avatarColor: colors[18 % colors.length], winRate: 50 },
+    { id: '20', name: 'Benjamin L.', initial: 'B', avatarColor: colors[19 % colors.length], winRate: 58 },
+    { id: '21', name: 'Amelia Y.', initial: 'A', avatarColor: colors[20 % colors.length], winRate: 41 },
+    { id: '22', name: 'Lucas R.', initial: 'L', avatarColor: colors[21 % colors.length], winRate: 59 },
+    { id: '23', name: 'Harper D.', initial: 'H', avatarColor: colors[22 % colors.length], winRate: 45 }
   ];
 
   // Handle opponent selection
@@ -98,16 +102,16 @@ export default function NewMatch() {
           {/* Recent Opponents */}
           <p className="text-sm font-medium text-gray-500 mb-2">Recent Opponents</p>
           
-          <div className="space-y-2">
-            {recentOpponents.map(opponent => (
+            <div className="space-y-2">
+            {recentOpponents.slice(0, 6).map(opponent => (
               <OpponentSelectItem
-                key={opponent.id}
-                player={opponent}
-                isSelected={selectedOpponent === opponent.id}
-                onClick={() => handleOpponentSelect(opponent.id)}
+              key={opponent.id}
+              player={opponent}
+              isSelected={selectedOpponent === opponent.id}
+              onClick={() => handleOpponentSelect(opponent.id)}
               />
             ))}
-          </div>
+            </div>
         </div>
 
         {/* Step 2: Match Result */}

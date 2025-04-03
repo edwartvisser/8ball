@@ -1,5 +1,5 @@
 // src/components/ui/Avatar.tsx
-type AvatarColor = 'indigo' | 'yellow' | 'purple' | 'green' | 'red' | 'blue' | 'pink' | 'orange' | 'teal';
+type AvatarColor = 'indigo' | 'yellow' | 'purple' | 'green' | 'red' | 'blue' | 'pink' | 'orange' | 'teal' | 'cyan';
 
 interface AvatarProps {
   initial: string;
@@ -27,7 +27,12 @@ export const Avatar = ({
     yellow: "bg-yellow-500",
     purple: "bg-purple-500",
     green: "bg-green-500",
-    red: "bg-red-500"
+    red: "bg-red-500",
+    blue: "bg-blue-500",
+    pink: "bg-pink-500",
+    orange: "bg-orange-500",
+    teal: "bg-teal-500",
+    cyan: "bg-cyan-500"
   };
   
   return (
