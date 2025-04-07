@@ -77,7 +77,6 @@ interface RankingPlayerItemProps {
     id: string;
     name: string;
     initial: string;
-    avatarColor?: string;
     rank: number;
     wins: number;
     losses: number;

@@ -155,9 +155,8 @@ export default function MatchHistory() {
           {filteredHistory.length > 0 ? (
             filteredHistory.map((group, index) => (
               <div key={`${group.date}-${index}`} className="mb-4">
-                <div className="flex justify-between items-center mb-2 py-2 sticky top-0 bg-white z-10">
+                <div className="flex justify-between items-center mb-2 py-2 sticky top-0 z-10">
                   <h3 className="font-medium text-sm text-gray-500">{group.date}</h3>
-                  {group.time && <p className="text-xs text-gray-400">{group.time}</p>}
                 </div>
                 
                 <div className="space-y-3">
@@ -198,8 +197,8 @@ const MatchItem = ({ match }: MatchItemProps) => {
     <Card className="p-3">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <Avatar initial="Y" color="indigo" size="sm" className="mr-2" />
-          <div className="font-medium">You</div>
+          <Avatar initial="E" color="indigo" size="sm" className="mr-2" />
+          <div className="font-medium text-sm">Edwart V.</div>
         </div>
         
         <div className="flex items-center">
@@ -211,7 +210,7 @@ const MatchItem = ({ match }: MatchItemProps) => {
         </div>
         
         <div className="flex items-center">
-          <div className="font-medium text-right">{match.opponentName}</div>
+          <div className="font-medium text-sm text-right">{match.opponentName}</div>
           <Avatar 
             initial={match.opponentInitial} 
             color={match.opponentColor} 
@@ -220,10 +219,6 @@ const MatchItem = ({ match }: MatchItemProps) => {
           />
         </div>
       </div>
-      
-      {match.time && (
-        <p className="text-xs text-gray-400 mt-1 pl-8">{match.time}</p>
-      )}
     </Card>
   );
 };

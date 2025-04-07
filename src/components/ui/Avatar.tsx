@@ -22,7 +22,7 @@ export const Avatar = ({
   };
   
   // Color classes mapping
-  const colorClasses = {
+ const colorClasses = {
     indigo: "bg-indigo-500",
     yellow: "bg-yellow-500",
     purple: "bg-purple-500",
