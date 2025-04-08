@@ -1,152 +1,55 @@
 // src/app/playerranking/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '../../components/layout/AppLayout';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { TabNav } from '../../components/ui/Tabs';
 import { RankingPlayerItem } from '../../components/features/PlayerListItem';
 import BottomNavigation from '@/components/layout/BottomNavigation';
+import { usePlayer } from '@/context/PlayerContext';
 
 export default function PlayerRanking() {
   const router = useRouter();
-  // State for filter tabs
-  const [filter, setFilter] = useState('all');
+  const { currentPlayer } = usePlayer();
   
-  // Mock data for player rankings
-  const players = [
-    {
-      id: '1',
-      name: 'Jessica K.',
-      initial: 'J',
-      avatarColor: 'yellow',
-      rank: 1,
-      wins: 23,
-      losses: 9,
-      streak: 2,
-      winPercentage: 71.9
-    },
-    {
-      id: '2',
-      name: 'Edwart V.',
-      initial: 'Y',
-      avatarColor: 'indigo',
-      rank: 2,
-      wins: 24,
-      losses: 12,
-      streak: 3,
-      winPercentage: 66.7,
-      isCurrentUser: true
-    },
-    {
-      id: '3',
-      name: 'Michael T.',
-      initial: 'M',
-      avatarColor: 'purple',
-      rank: 3,
-      wins: 17,
-      losses: 11,
-      streak: -1,
-      winPercentage: 60.7
-    },
-    {
-      id: '4',
-      name: 'Sandra L.',
-      initial: 'S',
-      avatarColor: 'green',
-      rank: 4,
-      wins: 24,
-      losses: 17,
-      streak: 1,
-      winPercentage: 58.5
-    },
-    {
-      id: '5',
-      name: 'Thomas W.',
-      initial: 'T',
-      avatarColor: 'blue',
-      rank: 5,
-      wins: 14,
-      losses: 11,
-      streak: 4,
-      winPercentage: 56.0
-    },
-    {
-      id: '6',
-      name: 'David M.',
-      initial: 'D',
-      avatarColor: 'red',
-      rank: 6,
-      wins: 16,
-      losses: 14,
-      streak: -2,
-      winPercentage: 53.3
-    },
-    {
-      id: '7',
-      name: 'Emily R.',
-      initial: 'E',
-      avatarColor: 'pink',
-      rank: 7,
-      wins: 11,
-      losses: 11,
-      streak: 0,
-      winPercentage: 50.0
-    },
-    {
-      id: '8',
-      name: 'Robert J.',
-      initial: 'R',
-      avatarColor: 'orange',
-      rank: 8,
-      wins: 8,
-      losses: 10,
-      streak: -3,
-      winPercentage: 44.4
-    },
-    {
-      id: '9',
-      name: 'Lisa P.',
-      initial: 'L',
-      avatarColor: 'blue',
-      rank: 9,
-      wins: 0,
-      losses: 0,
-      streak: 0,
-      winPercentage: 0.0,
-      played: false
-    },
-    {
-      id: '10',
-      name: 'Chris B.',
-      initial: 'C',
-      avatarColor: 'teal',
-      rank: 10,
-      wins: 0,
-      losses: 0,
-      streak: 0,
-      winPercentage: 0.0,
-      played: false
-    }
-  ];
+  // Verwijder de niet gebruikte filter state
+  const [rankings, setRankings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  // Ophalen van de spelerranglijsten
+  useEffect(() => {
+    const fetchRankings = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/players/rankings');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch player rankings');
+        }
+        
+        const data = await response.json();
+        setRankings(data);
+      } catch (error) {
+        console.error('Error fetching player rankings:', error);
+        // Fallback naar een lege lijst
+        setRankings([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchRankings();
+  }, []);
 
-  // Filter players based on selected tab
-  const filteredPlayers = players.filter(player => {
-    if (filter === 'all') return true;
-    if (filter === 'played') return player.played !== false;
-    if (filter === 'notplayed') return player.played === false;
-    return true;
-  });
+  // Gebruik alle spelers zonder filter
+  const filteredPlayers = rankings;
 
   // Navigate to player profile
   const viewPlayerProfile = (playerId: string) => {
     router.push(`/playerprofile?id=${playerId}`);
   };
-
-  // Get user's position
-  const currentUser = players.find(p => p.isCurrentUser);
-  const userPosition = currentUser ? currentUser.rank : null;
 
   return (
     <AppLayout>
@@ -155,19 +58,6 @@ export default function PlayerRanking() {
           title="Player Rankings" 
           backUrl="/dashboard" 
         />
-
-        {/* Filter Tabs
-        <TabNav
-          options={[
-            { id: 'all', label: 'All Players' },
-            { id: 'played', label: 'Played' },
-            { id: 'notplayed', label: 'Not Played' }
-          ]}
-          activeId={filter}
-          onChange={setFilter}
-          variant="contained"
-          className="mb-4"
-        /> */}
 
         {/* Rankings Table Header */}
         <div className="mb-2">
@@ -182,18 +72,58 @@ export default function PlayerRanking() {
 
         {/* Rankings List */}
         <div className="overflow-y-auto flex-1 pb-20">
-          <div className="space-y-2">
-            {filteredPlayers.map(player => (
-              <RankingPlayerItem 
-                key={player.id}
-                player={player}
-                onClick={() => viewPlayerProfile(player.id)}
-              />
-            ))}
-          </div>
+          {loading ? (
+            // Toon laad-indicators
+            <div className="space-y-3">
+              {[...Array(8)].map((_, index) => (
+                <div key={index} className="bg-white rounded-lg p-4 shadow-sm animate-pulse">
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-1">
+                      <div className="w-7 h-7 bg-gray-200 rounded-full"></div>
+                    </div>
+                    <div className="col-span-5">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    </div>
+                    <div className="col-span-2 flex justify-center">
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                    <div className="col-span-2 flex justify-center">
+                      <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                    </div>
+                    <div className="col-span-2 flex justify-end">
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredPlayers.length > 0 ? (
+            <div className="space-y-2">
+              {filteredPlayers.map(player => (
+                <RankingPlayerItem 
+                  key={player.id}
+                  player={{
+                    id: player.id,
+                    name: player.name,
+                    initial: player.name.charAt(0),
+                    rank: player.rank,
+                    wins: player.wins,
+                    losses: player.losses || (player.total_matches - player.wins),
+                    streak: player.streak,
+                    winPercentage: parseFloat(player.winPercentage || player.win_percentage).toFixed(1),
+                    isCurrentUser: currentPlayer?.id === player.id
+                  }}
+                  onClick={() => viewPlayerProfile(player.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            // Toon bericht als er geen spelers zijn
+            <div className="py-8 text-center text-gray-500">
+              No players found
+            </div>
+          )}
         </div>
-
-       
       </div>
       <BottomNavigation />
     </AppLayout>

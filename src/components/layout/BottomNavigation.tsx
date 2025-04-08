@@ -31,7 +31,7 @@ export const BottomNavigation = () => {
         icon="chart-bar" 
         active={isActive('/playerranking')} 
       />
-      <NavItem 
+      {/* <NavItem 
         href="/playerprofile" 
         label="Profile" 
         icon="user" 
@@ -42,7 +42,7 @@ export const BottomNavigation = () => {
         label="History" 
         icon="clock" 
         active={isActive('/matchhistory')} 
-      />
+      /> */}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Head from "next/head";
 import "./globals.css";
+import { PlayerProvider } from '@/context/PlayerContext';
 
 export const metadata: Metadata = {
   title: "8ball pool tracker",
@@ -21,7 +22,9 @@ export default function RootLayout({
         ></script>
       </Head>
       <body>
-        {children}
+        <PlayerProvider>
+          {children}
+        </PlayerProvider>
       </body>
     </html>
   );

@@ -1,82 +1,93 @@
-// src/app/newmatch/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppLayout } from '../../components/layout/AppLayout';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { OpponentSelectItem } from '../../components/features/PlayerListItem';
 import BottomNavigation from '@/components/layout/BottomNavigation';
+import { usePlayer } from '@/context/PlayerContext';
 
 export default function NewMatch() {
   const router = useRouter();
+  const { currentPlayer } = usePlayer();
   const [step, setStep] = useState(1);
   const [selectedOpponent, setSelectedOpponent] = useState<string | null>(null);
   const [matchResult, setMatchResult] = useState<'win' | 'loss' | null>(null);
+  const [players, setPlayers] = useState([]);
 
-  // Mock data for recent opponents
-  const colors = ['yellow', 'purple', 'green', 'blue', 'pink', 'orange', 'red', 'teal', 'cyan'];
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await fetch('/api/players'); // Replace with your actual endpoint
+        const data = await response.json();
+        const filteredPlayers = data.filter((player: any) => player.id !== currentPlayer.id);
+        setPlayers(filteredPlayers);
+      } catch (error) {
+        console.error('Error fetching players:', error);
+      }
+    };
 
-  const recentOpponents = [
-    { id: '1', name: 'Jessica K.', initial: 'J', avatarColor: colors[0 % colors.length], winRate: 38 },
-    { id: '2', name: 'Michael T.', initial: 'M', avatarColor: colors[1 % colors.length], winRate: 52 },
-    { id: '3', name: 'Sandra L.', initial: 'S', avatarColor: colors[2 % colors.length], winRate: 45 },
-    { id: '4', name: 'David P.', initial: 'D', avatarColor: colors[3 % colors.length], winRate: 60 },
-    { id: '5', name: 'Emily R.', initial: 'E', avatarColor: colors[4 % colors.length], winRate: 47 },
-    { id: '6', name: 'Chris B.', initial: 'C', avatarColor: colors[5 % colors.length], winRate: 50 },
-    { id: '7', name: 'Laura H.', initial: 'L', avatarColor: colors[6 % colors.length], winRate: 42 },
-    { id: '8', name: 'James W.', initial: 'J', avatarColor: colors[7 % colors.length], winRate: 55 },
-    { id: '9', name: 'Sophia N.', initial: 'S', avatarColor: colors[8 % colors.length], winRate: 49 },
-    { id: '10', name: 'Daniel G.', initial: 'D', avatarColor: colors[9 % colors.length], winRate: 53 },
-    { id: '11', name: 'Olivia F.', initial: 'O', avatarColor: colors[10 % colors.length], winRate: 46 },
-    { id: '12', name: 'Ethan C.', initial: 'E', avatarColor: colors[11 % colors.length], winRate: 51 },
-    { id: '13', name: 'Ava M.', initial: 'A', avatarColor: colors[12 % colors.length], winRate: 44 },
-    { id: '14', name: 'Liam J.', initial: 'L', avatarColor: colors[13 % colors.length], winRate: 57 },
-    { id: '15', name: 'Isabella K.', initial: 'I', avatarColor: colors[14 % colors.length], winRate: 48 },
-    { id: '16', name: 'Noah V.', initial: 'N', avatarColor: colors[15 % colors.length], winRate: 54 },
-    { id: '17', name: 'Mia Z.', initial: 'M', avatarColor: colors[16 % colors.length], winRate: 43 },
-    { id: '18', name: 'Alexander T.', initial: 'A', avatarColor: colors[17 % colors.length], winRate: 56 },
-    { id: '19', name: 'Charlotte Q.', initial: 'C', avatarColor: colors[18 % colors.length], winRate: 50 },
-    { id: '20', name: 'Benjamin L.', initial: 'B', avatarColor: colors[19 % colors.length], winRate: 58 },
-    { id: '21', name: 'Amelia Y.', initial: 'A', avatarColor: colors[20 % colors.length], winRate: 41 },
-    { id: '22', name: 'Lucas R.', initial: 'L', avatarColor: colors[21 % colors.length], winRate: 59 },
-    { id: '23', name: 'Harper D.', initial: 'H', avatarColor: colors[22 % colors.length], winRate: 45 }
-  ];
+    fetchPlayers();
+  }, [currentPlayer.id]);
 
-  // Handle opponent selection
   const handleOpponentSelect = (opponentId: string) => {
     setSelectedOpponent(opponentId);
     setStep(2);
   };
 
-  // Handle result selection
-  const handleResultSelect = (result: 'win' | 'loss') => {
+  const handleResultSelect = async (result: 'win' | 'loss') => {
     setMatchResult(result);
-    // In a real app, you would save the match here
-    
-    // Simulate saving and redirect after a short delay
-    setTimeout(() => {
-      router.push('/dashboard');
-    }, 1000);
+    const opponent = players.find(o => o.id === selectedOpponent);
+
+    if (!opponent) {
+      console.error('Opponent not found');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/matches', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          player1_id: currentPlayer.id,
+          player2_id: opponent.id,
+          winner_id: result === 'win' ? currentPlayer.id : opponent.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save match result');
+      }
+
+      console.log(`Match saved: ${currentPlayer.name} vs ${opponent.name} - Result: ${result}`);
+
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1000);
+    } catch (error) {
+      console.error('Error saving match result:', error);
+    }
   };
 
   return (
     <AppLayout>
       <div className="px-5">
-        <PageHeader 
-          title="Record New Match" 
-          backUrl="/dashboard" 
-        />
+        <PageHeader title="Record New Match" backUrl="/dashboard" />
 
         {/* Step 1: Select Opponent */}
         <div className="mb-6">
           <div className="flex items-center mb-4">
-            <div className={`
-              flex items-center justify-center
-              w-7 h-7 rounded-full
-              ${step === 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'}
-              font-semibold text-sm mr-3
-            `}>
+            <div
+              className={`
+                flex items-center justify-center
+                w-7 h-7 rounded-full
+                ${step === 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'}
+                font-semibold text-sm mr-3
+              `}
+            >
               1
             </div>
             <div>
@@ -85,44 +96,70 @@ export default function NewMatch() {
             </div>
           </div>
 
-          {/* Search Input */}
-          <div className="relative mb-4">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+          {/* Current Player Indicator */}
+          <div className="flex items-center p-3 bg-indigo-50 rounded-lg mb-4 border border-indigo-100">
+            <div
+              className="bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-semibold mr-3"
+            >
+              {currentPlayer.initial}
             </div>
-            <input 
-              type="text" 
-              placeholder="Search player..." 
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-            />
+            <div>
+              <p className="font-medium text-sm">{currentPlayer.name}</p>
+              <p className="text-xs text-indigo-600">This is you</p>
+            </div>
           </div>
 
-          {/* Recent Opponents */}
-          <p className="text-sm font-medium text-gray-500 mb-2">Recent Opponents</p>
-          
-            <div className="space-y-2">
-            {recentOpponents.slice(0, 6).map(opponent => (
+          {/* Search Input */}
+          {/* <div className="relative mb-4">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Search player..."
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div> */}
+
+          {/* Opponents List */}
+          <p className="text-sm font-medium text-gray-500 mb-2">Available Opponents</p>
+
+          <div className="space-y-2">
+            {players.slice(0, 6).map(opponent => (
               <OpponentSelectItem
-              key={opponent.id}
-              player={opponent}
-              isSelected={selectedOpponent === opponent.id}
-              onClick={() => handleOpponentSelect(opponent.id)}
+                key={opponent.id}
+                player={opponent}
+                isSelected={selectedOpponent === opponent.id}
+                onClick={() => handleOpponentSelect(opponent.id)}
               />
             ))}
-            </div>
+          </div>
         </div>
 
         {/* Step 2: Match Result */}
         <div className="mb-6">
           <div className="flex items-center mb-4">
-            <div className={`
-              flex items-center justify-center
-              w-7 h-7 rounded-full
-              ${step === 2 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'}
-              font-semibold text-sm mr-3
-            `}>
+            <div
+              className={`
+                flex items-center justify-center
+                w-7 h-7 rounded-full
+                ${step === 2 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'}
+                font-semibold text-sm mr-3
+              `}
+            >
               2
             </div>
             <div>
@@ -170,7 +207,7 @@ export default function NewMatch() {
               I Lost
             </button>
           </div>
-          
+
           {/* Confirmation Message */}
           {matchResult && (
             <div className="mt-4 text-center">

@@ -1,37 +1,91 @@
 "use client"
-// src/app/dashboard/page.tsx
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppLayout } from '../../components/layout/AppLayout';
-// import { TabNav } from '../../components/ui/Tabs';
 import { StatCard } from '../../components/ui/Card';
-import {PlayerListItem} from '@/components/features/PlayerListItem';
+import { PlayerListItem } from '@/components/features/PlayerListItem';
 import BottomNavigation from '@/components/layout/BottomNavigation';
 
+import { usePlayer } from '@/context/PlayerContext';
+import PlayerSelectionDropdown from '@/components/features/PlayerSelectionDropdown';
+
 export default function Dashboard() {
-  // For client-side state with tabs
-  const [activeTab, setActiveTab] = useState('recent');
+  const { currentPlayer, setCurrentPlayer } = usePlayer();
+  const [recentMatches, setRecentMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
   
-  // Mock data
-  const userStats = {
-    name: 'Edwart',
-    winRate: 67,
-    currentStreak: 3,
-    wins: 24,
-    losses: 12
+  // Stats state toevoegen
+  const [stats, setStats] = useState({
+    total: 0,
+    wins: 0,
+    losses: 0,
+    winRate: 0,
+    currentStreak: 0
+  });
+
+  const handlePlayerChange = (newPlayer: { name: string }) => {
+    console.log(`Selected ${newPlayer.name} as player 1 for new matches`);
+    setCurrentPlayer(newPlayer); // Update the current player in the context
   };
 
-  // Recent matches data
-  const recentMatches = [
-    { id: 1, opponent: 'Jessica K.', initial: 'J', color: 'yellow', result: 'win', when: 'Today' },
-    { id: 2, opponent: 'Michael T.', initial: 'M', color: 'purple', result: 'win', when: 'Today' },
-    { id: 3, opponent: 'Sandra L.', initial: 'S', color: 'green', result: 'loss', when: 'Yesterday' },
-    { id: 4, opponent: 'David M.', initial: 'D', color: 'red', result: 'win', when: '2 days ago' },
-    { id: 5, opponent: 'Emily R.', initial: 'E', color: 'blue', result: 'loss', when: '3 days ago' },
-    { id: 6, opponent: 'Chris P.', initial: 'C', color: 'orange', result: 'win', when: '4 days ago' },
-    { id: 7, opponent: 'Laura H.', initial: 'L', color: 'pink', result: 'loss', when: '5 days ago' },
-    { id: 8, opponent: 'Tom W.', initial: 'T', color: 'teal', result: 'win', when: '6 days ago' }
-  ];
+  // Spelersstatistieken ophalen
+  useEffect(() => {
+    const fetchPlayerStats = async () => {
+      if (!currentPlayer?.id) return;
+      
+      try {
+        setStatsLoading(true);
+        const response = await fetch(`/api/players/stats?playerId=${currentPlayer.id}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch player stats');
+        }
+        
+        const data = await response.json();
+        setStats({
+          total: data.total || 0,
+          wins: data.wins || 0,
+          losses: data.losses || 0,
+          winRate: parseFloat(data.winRate) || 0,
+          currentStreak: data.currentStreak || 0
+        });
+      } catch (error) {
+        console.error('Error fetching player stats:', error);
+        // Behoud de huidige stats bij fouten
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+    
+    fetchPlayerStats();
+  }, [currentPlayer?.id]);
+
+  // retrieve recent matches from the current player
+  useEffect(() => {
+    const fetchRecentMatches = async () => {
+      if (!currentPlayer?.id) return;
+      
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/matches/recent?playerId=${currentPlayer.id}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch recent matches');
+        }
+
+        const data = await response.json();
+        setRecentMatches(data);
+      } catch (error) {
+        console.error('Error fetching recent matches:', error); 
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentMatches();
+  }, [currentPlayer?.id]);
 
   return (
     <AppLayout>
@@ -40,40 +94,69 @@ export default function Dashboard() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-xl font-bold text-black">8 Ball Tracker</h1>
-            <p className="text-sm text-gray-500">Hello, {userStats.name}</p>
+            <p className="text-sm text-gray-500">Hello, {currentPlayer?.name || 'Player'}</p>
           </div>
-          <div className="bg-indigo-500 text-white flex items-center justify-center rounded-full w-9 h-9 font-semibold">
-            {userStats.name.charAt(0)}
-          </div>
+          <PlayerSelectionDropdown onChange={handlePlayerChange} />
         </div>
-
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <StatCard 
-            label="Win Rate" 
-            value={`${userStats.winRate}%`}
-            progress={{ 
-              value: userStats.winRate, 
-              gradient: true 
-            }}
-          />
-          
-          <StatCard 
-            label="Current Streak" 
-            value={`+${userStats.currentStreak}`}
-            subtext="🔥 Keep it up!"
-          />
-          
-          <StatCard 
-            label="Wins" 
-            value={userStats.wins}
-          />
-          
-          <StatCard 
-            label="Losses" 
-            value={userStats.losses}
-          />
+          {statsLoading ? (
+            // Skeletten tijdens het laden
+            <>
+              <div className="bg-white rounded-xl p-3 shadow-sm animate-pulse">
+                <div className="h-3 w-1/2 bg-gray-200 rounded mb-2"></div>
+                <div className="h-6 w-1/3 bg-gray-200 rounded mb-2"></div>
+                <div className="h-2 w-full bg-gray-200 rounded"></div>
+              </div>
+              <div className="bg-white rounded-xl p-3 shadow-sm animate-pulse">
+                <div className="h-3 w-1/2 bg-gray-200 rounded mb-2"></div>
+                <div className="h-6 w-1/3 bg-gray-200 rounded mb-2"></div>
+                <div className="h-2 w-1/2 bg-gray-200 rounded"></div>
+              </div>
+              <div className="bg-white rounded-xl p-3 shadow-sm animate-pulse">
+                <div className="h-3 w-1/2 bg-gray-200 rounded mb-2"></div>
+                <div className="h-6 w-1/3 bg-gray-200 rounded"></div>
+              </div>
+              <div className="bg-white rounded-xl p-3 shadow-sm animate-pulse">
+                <div className="h-3 w-1/2 bg-gray-200 rounded mb-2"></div>
+                <div className="h-6 w-1/3 bg-gray-200 rounded"></div>
+              </div>
+            </>
+          ) : (
+            <>
+              <StatCard 
+              label="Win Rate" 
+              value={`${stats.winRate}%`}
+              progress={{ 
+                value: stats.winRate, 
+                gradient: true 
+              }}
+              />
+              
+              <StatCard 
+              label="Current Streak" 
+              value={stats.currentStreak > 0 ? `+${stats.currentStreak}` : stats.currentStreak}
+              subtext={
+                stats.currentStreak > 0 
+                ? "🔥 Keep it up!" 
+                : stats.currentStreak < 0 
+                ? "💔 Time to bounce back!" 
+                : ""
+              }
+              />
+              
+              <StatCard 
+              label="Wins" 
+              value={stats.wins}
+              />
+              
+              <StatCard 
+              label="Losses" 
+              value={stats.losses}
+              />
+            </>
+          )}
         </div>
 
         {/* Record New Match Button */}
@@ -84,16 +167,22 @@ export default function Dashboard() {
           Record New Match
         </Link>
 
-        {/* Tabs */}
         {/* Match List */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold">Recent Matches</h2>
-            {recentMatches.slice(0, 6).map((match) => (
-              
+
+          {loading ? (
+            // Laadanimatie
+            <div className="py-8 flex justify-center">
+              <div className="w-6 h-6 border-2 border-indigo-500 rounded-full animate-spin border-t-transparent"></div>
+            </div>
+          ) : recentMatches.length > 0 ? (
+            // Lijst van wedstrijden
+            recentMatches.map((match) => (
               <PlayerListItem
                 key={match.id}
-                initial={match.initial}
-                name={match.opponent}
+                initial={match.opponent_name?.charAt(0) || 'X'}
+                name={match.opponent_name || 'Unknown'}
                 avatarColor={match.color}
                 stats={
                   <div className="flex items-center">
@@ -103,14 +192,18 @@ export default function Dashboard() {
                   </div>
                 }
                 subtitle={match.when}
-                onClick={() => console.log(`Clicked on ${match.opponent}`)}
+                onClick={() => console.log(`Clicked on ${match.opponent_name}`)}
                 className="cursor-pointer hover:bg-gray-50 transition-colors"
               />
+            ))
+          ) : (
+            // Geen wedstrijden gevonden
+            <div className="py-8 text-center text-gray-500">
+              No recent matches found
+            </div>
+          )}
 
-              
-            ))}
-          </div>
-        
+        </div>
       </div>
 
       <BottomNavigation />

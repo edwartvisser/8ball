@@ -156,8 +156,8 @@ export const OpponentSelectItem = ({
   return (
     <PlayerListItem
       name={player.name}
-      initial={player.initial}
-      avatarColor={player.avatarColor}
+      initial={player.name.charAt(0).toUpperCase()}
+      avatarColor={player.avatarColor || 'indigo'}
       subtitle={player.subtitle || (player.winRate !== undefined ? `Win rate: ${player.winRate}%` : undefined)}
       isSelected={isSelected}
       onClick={onClick}
