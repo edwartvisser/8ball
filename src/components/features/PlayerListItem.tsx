@@ -95,7 +95,7 @@ export const RankingPlayerItem = ({
 }: RankingPlayerItemProps) => {
   // Helper to determine streak styling
   const getStreakElement = (streak: number) => {
-    console.log(player);
+    //console.log(player);
 
     if (streak > 0) {
       return <span className="text-center text-sm text-green-600">+{streak}</span>;

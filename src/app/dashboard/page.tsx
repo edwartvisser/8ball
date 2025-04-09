@@ -179,6 +179,7 @@ export default function Dashboard() {
           ) : recentMatches.length > 0 ? (
             // Lijst van wedstrijden
             recentMatches.map((match) => (
+              console.log(match),
               <PlayerListItem
                 key={match.id}
                 initial={match.opponent_name?.charAt(0) || 'X'}

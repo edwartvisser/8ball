@@ -62,7 +62,7 @@ const PlayerSelectionDropdown = () => {
     <div className="relative" ref={dropdownRef}>
       {/* Avatar Button */}
       <button 
-        className="bg-indigo-500 text-white flex items-center justify-center rounded-full w-9 h-9 font-semibold focus:outline-none hover:opacity-90 transition-opacity"
+        className={`bg-${currentPlayer.avatarcolor}-500 text-white flex items-center justify-center rounded-full w-9 h-9 font-semibold focus:outline-none hover:opacity-90 transition-opacity`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-haspopup="true"

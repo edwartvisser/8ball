@@ -6,6 +6,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const playerId = searchParams.get('playerId');
+    const avatarColor = searchParams.get('avatarColor');
     const limit = searchParams.get('limit') || 6;
     
     if (!playerId) {
@@ -24,6 +25,8 @@ export async function GET(request) {
       const matchDate = new Date(match.match_date);
       const today = new Date();
       const diffDays = Math.floor((today - matchDate) / (1000 * 60 * 60 * 24));
+
+      console.log(avatarColor);
       
       let when = '';
       if (diffDays === 0) {
@@ -38,9 +41,10 @@ export async function GET(request) {
       
       // Genereer een willekeurige kleur voor de avatar (voor demo-doeleinden)
       // In een echte app zou je deze uit de database halen
-      const colors = ['yellow', 'purple', 'green', 'red', 'blue', 'pink', 'orange', 'teal'];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      
+      //const colors = ['yellow', 'purple', 'green', 'red', 'blue', 'pink', 'orange', 'teal'];
+      //const color = colors[Math.floor(Math.random() * colors.length)];
+      const color = avatarColor || 'indigo'; // Default color if not provided
+
       return {
         ...match,
         when,
