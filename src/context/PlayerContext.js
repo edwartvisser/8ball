@@ -9,9 +9,9 @@ const PlayerContext = createContext();
 // Context provider component
 export function PlayerProvider({ children }) {
   const [currentPlayer, setCurrentPlayer] = useState({ 
-    name: '-', 
-    initial: '-', 
-    avatarColor: 'indigo',
+    name: 'Select a player', 
+    initial: 'X', 
+    avatarcolor: 'indigo',
     id: null
   });
 

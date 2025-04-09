@@ -94,7 +94,7 @@ export default function Dashboard() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-xl font-bold text-black">8 Ball Tracker</h1>
-            <p className="text-sm text-gray-500">Hello, {currentPlayer?.name || 'Player'}</p>
+            <p className="text-sm text-gray-500">Hello, {currentPlayer?.name || 'Select a player'}</p>
           </div>
           <PlayerSelectionDropdown onChange={handlePlayerChange} />
         </div>
@@ -162,7 +162,16 @@ export default function Dashboard() {
         {/* Record New Match Button */}
         <Link 
           href="/newmatch" 
-          className="block w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg mb-4 text-center"
+          className={`block w-full font-semibold py-3 px-4 rounded-lg mb-4 text-center ${
+            currentPlayer?.id > 0 
+              ? 'bg-indigo-500 hover:bg-indigo-600 text-white' 
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+          onClick={(e) => {
+            if (!(currentPlayer?.id > 0)) {
+              e.preventDefault(); // Prevent navigation if player ID is not valid
+            }
+          }}
         >
           Record New Match
         </Link>
@@ -174,7 +183,8 @@ export default function Dashboard() {
           {loading ? (
             // Laadanimatie
             <div className="py-8 flex justify-center">
-              <div className="w-6 h-6 border-2 border-indigo-500 rounded-full animate-spin border-t-transparent"></div>
+              Select a player
+              {/* <div className="w-6 h-6 border-2 border-indigo-500 rounded-full animate-spin border-t-transparent"></div> */}
             </div>
           ) : recentMatches.length > 0 ? (
             // Lijst van wedstrijden
