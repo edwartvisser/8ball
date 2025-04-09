@@ -95,6 +95,8 @@ export const RankingPlayerItem = ({
 }: RankingPlayerItemProps) => {
   // Helper to determine streak styling
   const getStreakElement = (streak: number) => {
+    console.log(player);
+
     if (streak > 0) {
       return <span className="text-center text-sm text-green-600">+{streak}</span>;
     } else if (streak < 0) {
@@ -123,7 +125,7 @@ export const RankingPlayerItem = ({
         {player.wins}-{player.losses}
       </div>
       <div className="col-span-2 text-center">
-        {getStreakElement(player.streak)}
+        {player.streak}
       </div>
       <div className="col-span-2 text-right text-sm font-medium">
         {player.winPercentage}%

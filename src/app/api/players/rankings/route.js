@@ -1,25 +1,46 @@
 // src/app/api/players/rankings/route.js
 import { NextResponse } from 'next/server';
-import { getPlayerRankings } from '@/lib/database';
+import { getPlayerRankings, executeQuery } from '@/lib/database';
 
 export async function GET(request) {
   try {
+    // Get the base player rankings
     const rankings = await getPlayerRankings();
     
-    // Ranglijsten verrijken met extra gegevens voor de UI
-    const enhancedRankings = rankings.map((player, index) => {
-      // Bereken streak (in een echte app zou je dit uit de database halen)
-      // Dit is een placeholder; in productie haal je de werkelijke streak op
-      const randomStreak = Math.floor(Math.random() * 7) - 3;
+    // Process each player to add the streak information
+    const enhancedRankings = await Promise.all(rankings.map(async (player, index) => {
+      // Get the player's recent matches to calculate their streak
+      const recentMatches = await executeQuery({
+        query: `
+          SELECT 
+            m.winner_id = ? as won
+          FROM matches m
+          WHERE m.player1_id = ? OR m.player2_id = ?
+          ORDER BY m.match_date DESC
+          LIMIT 10
+        `,
+        values: [player.id, player.id, player.id]
+      });
+      
+      // Calculate the streak
+      let currentStreak = 0;
+      for (let match of recentMatches) {
+        if (match.won === 1 && currentStreak >= 0) {
+          currentStreak++;
+        } else if (match.won === 0 && currentStreak <= 0) {
+          currentStreak--;
+        } else {
+          break;
+        }
+      }
       
       return {
         ...player,
-        rank: index + 1, // Ranglijstpositie op basis van de sortering
-        streak: randomStreak,
+        rank: index + 1, // Ranking position based on sorting
+        streak: currentStreak,
         winPercentage: player.win_percentage || 0,
-        // Voeg andere velden toe die nodig zijn voor de UI
       };
-    });
+    }));
     
     return NextResponse.json(enhancedRankings);
     

@@ -15,7 +15,7 @@ export async function GET(request) {
       );
     }
 
-    console.log(playerId, limit);
+    //console.log(playerId, limit);
     
     const matches = await getRecentMatchesByPlayerId(playerId, Number(limit));
     

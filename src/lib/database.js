@@ -185,14 +185,3 @@ export async function getRecentMatchesByPlayerId(playerId, limit = 6) {
   });
 }
 
-export {
-  executeQuery,
-  testConnection,
-  getPlayers,
-  getPlayerById,
-  getMatchesByPlayerId,
-  createMatch,
-  getPlayerStats,
-  getPlayerRankings,
-  getRecentMatchesByPlayerId
-};
