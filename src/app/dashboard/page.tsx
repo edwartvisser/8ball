@@ -26,7 +26,7 @@ export default function Dashboard() {
   });
 
   const handlePlayerChange = (newPlayer: { name: string }) => {
-    console.log(`Selected ${newPlayer.name} as player 1 for new matches`);
+    //console.log(`Selected ${newPlayer.name} as player 1 for new matches`);
     setCurrentPlayer(newPlayer); // Update the current player in the context
   };
 
