@@ -14,14 +14,20 @@ export default function NewMatch() {
   const [step, setStep] = useState(1);
   const [selectedOpponent, setSelectedOpponent] = useState<string | null>(null);
   const [matchResult, setMatchResult] = useState<'win' | 'loss' | null>(null);
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
         const response = await fetch('/api/players'); // Replace with your actual endpoint
         const data = await response.json();
-        const filteredPlayers = data.filter((player: any) => player.id !== currentPlayer.id);
+        const filteredPlayers = data
+          .filter((player: any) => player.id !== currentPlayer.id)
+          .map((player: any) => ({
+            ...player,
+            initial: player.name.charAt(0).toUpperCase(), // Add 'initial' property
+            avatarColor: player.avatarColor || 'indigo', // Default avatarColor if missing
+          }));
         setPlayers(filteredPlayers);
       } catch (error) {
         console.error('Error fetching players:', error);
@@ -108,31 +114,6 @@ export default function NewMatch() {
               <p className="text-xs text-indigo-600">This is you</p>
             </div>
           </div>
-
-          {/* Search Input */}
-          {/* <div className="relative mb-4">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <input
-              type="text"
-              placeholder="Search player..."
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div> */}
 
           {/* Opponents List */}
           <p className="text-sm font-medium text-gray-500 mb-2">Available Opponents</p>

@@ -12,7 +12,15 @@ import PlayerSelectionDropdown from '@/components/features/PlayerSelectionDropdo
 
 export default function Dashboard() {
   const { currentPlayer, setCurrentPlayer } = usePlayer();
-  const [recentMatches, setRecentMatches] = useState([]);
+  interface Match {
+    id: string;
+    opponent_name: string;
+    color: string;
+    result: 'win' | 'loss';
+    when: string;
+  }
+
+  const [recentMatches, setRecentMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [statsLoading, setStatsLoading] = useState(true);
   
@@ -181,15 +189,13 @@ export default function Dashboard() {
           <h2 className="text-lg font-semibold">Recent Matches</h2>
 
           {loading ? (
-            // Laadanimatie
+            // empty state
             <div className="py-8 flex justify-center">
               Select a player
-              {/* <div className="w-6 h-6 border-2 border-indigo-500 rounded-full animate-spin border-t-transparent"></div> */}
             </div>
           ) : recentMatches.length > 0 ? (
             // Lijst van wedstrijden
             recentMatches.map((match) => (
-              console.log(match),
               <PlayerListItem
                 key={match.id}
                 initial={match.opponent_name?.charAt(0) || 'X'}

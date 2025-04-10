@@ -49,7 +49,7 @@ export const PlayerListItem = ({
             <RankBadge rank={rank} />
           </div>
         )}
-        <Avatar initial={initial} color={avatarColor} size="sm" className="mr-3" />
+        <Avatar initial={initial} avatarColor={avatarColor} size="sm" className="mr-3" />
         <div>
           <div className="flex items-center">
             <p className="font-medium text-sm">{name}</p>
